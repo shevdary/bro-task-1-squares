@@ -1,0 +1,36 @@
+body{
+
+}
+.table-body{
+    border-color:black;
+}
+
+.btn-rm{
+    background-color: #7a1404;
+    color: #ffffff;
+    border: none;
+}
+.col{
+    height: 70px;
+    width: 70px;
+    background-color: #6dcaff;
+}
+.row{
+    height: 70px;
+    width: 70px;
+    background-color: #6dcaff;
+}
+.btn{
+    font-size: 50px;
+    width:70px;
+    height: 70px;
+}
+.btn-add{
+
+    background-color: #ffcc33;
+    border: none;
+    color: #ffffff;
+}
+.btn:hover{
+    opacity: 85%;
+}
