@@ -72,3 +72,6 @@ table{
 button:focus {
     outline: none;
 }
+.rmRow-none{
+    display: none;
+}
