@@ -2,9 +2,9 @@ let block = document.querySelector("#rect-block");
 let addColl = document.querySelector(".addCol");
 let addRow = document.querySelector(".addRow");
 
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 4; i++) {
   createElement("tr", block, "row", i);
-  for (let j = 0; j < 5; j++) {
+  for (let j = 0; j < 4; j++) {
     let child = block.lastElementChild;
     createElement("td", child, "col", j);
   }
@@ -40,6 +40,9 @@ function addButtonCol() {
     createElement("td", bodyRow, "col", q);
   }
 }
+
+
+
 
 
 
