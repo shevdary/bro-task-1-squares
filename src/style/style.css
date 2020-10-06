@@ -1,14 +1,20 @@
 body{
-
+    padding-top:100px;
+    margin: 0;
+}
+.main-square{
+    display: flex
+}
+.parent-table{
+    display: table;
+}
+table{
+    position: relative;
+    display: inline-block;
+    border: 2px solid #6dcaff;
 }
 .table-body{
     border-color:black;
-}
-
-.btn-rm{
-    background-color: #7a1404;
-    color: #ffffff;
-    border: none;
 }
 .col{
     height: 70px;
@@ -20,17 +26,49 @@ body{
     width: 70px;
     background-color: #6dcaff;
 }
+.addCol{
+    margin-top: -4px;
+    left:76px;
+    float: left;
+    display: block;
+    position: absolute;
+}
+.addRow{
+    margin-top: 4px;
+    top: 0px;
+    position: absolute;
+}
+.deleteRow{
+    margin-top: 4px;
+    float: left;
+}
+.deleteCol{
+    left: 76px;
+    top:4%;
+    position: absolute;
+}
+.btn-rm{
+    background-color: #7a1404;
+    color: #ffffff;
+    border: none;
+}
+
 .btn{
+
     font-size: 50px;
-    width:70px;
-    height: 70px;
+    width:72px;
+    height: 72px;
 }
 .btn-add{
-
+    top: auto;
     background-color: #ffcc33;
     border: none;
     color: #ffffff;
 }
 .btn:hover{
     opacity: 85%;
+}
+
+button:focus {
+    outline: none;
 }
