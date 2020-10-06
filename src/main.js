@@ -5,6 +5,7 @@ let rmRow = document.querySelector(".deleteRow");
 let rmCol = document.querySelector(".deleteCol");
 let parent = document.querySelector(".parent-table");
 let tbody = document.querySelectorAll("tbody");
+const pixel = "px";
 
 for (let i = 0; i < 4; i++) {
   createElement("tr", block, "row", i);
@@ -18,15 +19,12 @@ function createElement(tag, tagParent, className, index) {
   let tr = document.createElement(tag);
   tr.setAttribute("class", className);
   tr.setAttribute("id", index);
-  let currentChildIndex = tbody[0].children;
-
   tagParent.appendChild(tr);
 }
 
 addRow.addEventListener("click", addButtonRow);
 function addButtonRow() {
   let addRow = document.querySelectorAll("tr");
-
   addRow.forEach(item => {
     createElement("td", item, "col");
   });
@@ -53,8 +51,7 @@ function removeRow(event) {
   positionRow = e.target.parentElement.id;
   mouseY = e.pageY;
   const move = () => {
-    const p = "px";
-    rmRow.style.marginTop = mouseY - Number(120) + p;
+    rmRow.style.marginTop = mouseY - Number(120) + pixel;
   };
   move();
 }
@@ -62,7 +59,8 @@ function removeRow(event) {
 rmRow.addEventListener("click", deleteRow);
 function deleteRow() {
   let getBody = document.querySelectorAll("tbody")[0].children;
-  getBody[positionRow].style.display = "none";
+  let childBody = getBody[positionRow];
+  childBody.parentNode.removeChild(childBody);
 }
 
 block.addEventListener("mousemove", removeCol);
@@ -71,8 +69,7 @@ function removeCol(event) {
   positionCol = e.target.id;
   mouseX = e.pageX;
   const move = () => {
-    const p = "px";
-    rmCol.style.left = mouseX + Number(-50) + p;
+    rmCol.style.left = mouseX + Number(-50) + pixel;
   };
   move();
 }
