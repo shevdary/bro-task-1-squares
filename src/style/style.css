@@ -1,5 +1,5 @@
 body{
-    padding-top:100px;
+    padding-top:100px ;
     margin: 0;
 }
 .main-square{
@@ -39,15 +39,18 @@ table{
     position: absolute;
 }
 .deleteRow{
+    display: block;
     margin-top: 4px;
     float: left;
 }
 .deleteCol{
+    display: block;
     left: 76px;
     top:4%;
     position: absolute;
 }
 .btn-rm{
+
     background-color: #7a1404;
     color: #ffffff;
     border: none;
@@ -75,3 +78,4 @@ button:focus {
 .rmRow-none{
     display: none;
 }
+

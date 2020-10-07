@@ -3,8 +3,14 @@ let addColl = document.querySelector(".addCol");
 let addRow = document.querySelector(".addRow");
 let rmRow = document.querySelector(".deleteRow");
 let rmCol = document.querySelector(".deleteCol");
-let parent = document.querySelector(".parent-table");
+let square= document.getElementById('square');
 let tbody = document.querySelectorAll("tbody");
+
+let mouseY = 0;
+let positionRow = 0;
+let mouseX = 0;
+let positionCol = 0;
+
 const pixel = "px";
 
 for (let i = 0; i < 4; i++) {
@@ -41,17 +47,13 @@ function addButtonCol() {
   }
 }
 
-let mouseY = 0;
-let positionRow = 0;
-let mouseX = 0;
-let positionCol = 0;
 block.addEventListener("mousemove", removeRow);
 function removeRow(event) {
   let e = event;
   positionRow = e.target.parentElement.id;
-  mouseY = e.pageY;
+  mouseY = e.target.offsetTop;
   const move = () => {
-    rmRow.style.marginTop = mouseY - Number(120) + pixel;
+    rmRow.style.marginTop = mouseY+1  + pixel;
   };
   move();
 }
@@ -67,9 +69,9 @@ block.addEventListener("mousemove", removeCol);
 function removeCol(event) {
   let e = event;
   positionCol = e.target.id;
-  mouseX = e.pageX;
+  mouseX = e.target.offsetLeft;
   const move = () => {
-    rmCol.style.left = mouseX + Number(-50) + pixel;
+    rmCol.style.left = mouseX+74+ pixel;
   };
   move();
 }
@@ -81,4 +83,19 @@ function deleteCol() {
     let childRow = a.children[positionCol];
     childRow.parentNode.removeChild(childRow);
   }
+}
+
+square.addEventListener("mouseover", displayPosition);
+function displayPosition(event){
+    rmCol.style.display='block';
+    rmRow.style.display='block';
+    square.style.marginLeft='0px';
+}
+
+square.addEventListener('mouseout',RowCount)
+function RowCount(event) {
+    rmRow.style.display='none';
+    rmCol.style.display='none';
+    square.style.marginLeft='72px';
+
 }
