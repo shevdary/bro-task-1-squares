@@ -1,80 +1,84 @@
-body{
-    padding-top:100px ;
-    margin: 0px
+
+body {
+    padding-top: 100px;
+    padding-left: 100px;
 
 }
-.main-square{
-    display: flex
+
+.main-square {
+    display: flex;
+    padding: 15px;
 }
-.parent-table{
+
+.parent-table {
     display: table;
 }
-table{
+
+table {
     position: relative;
     display: inline-block;
-    border: 2px solid #6dcaff;
+    border: 1px solid #48aae6;
+
 }
-.table-body{
-    border-color:black;
+
+.col, .row {
+    height: 50px;
+    width: 50px;
+    background-color: #48aae6;;
 }
-.col{
-    height: 70px;
-    width: 70px;
-    background-color: #6dcaff;
+
+.addCol {
+    margin-top: 3px;
+    margin-left: 2px;
+    position: absolute;
 }
-.row{
-    height: 70px;
-    width: 70px;
-    background-color: #6dcaff;
-}
-.addCol{
-    margin-top: -4px;
-    left:76px;
-    float: left;
+
+.addRow {
+    margin-top: -2px;
+    left: 126px;
     display: block;
     position: absolute;
 }
-.addRow{
-    margin-top: 4px;
-    top: 0px;
+
+.deleteRow {
+    margin-top: 3px;
+    display: none;
+    left: 69px;
     position: absolute;
 }
-.deleteRow{
-    display: block;
-    margin-top: 4px;
-    float: left;
-}
-.deleteCol{
-    display: block;
-    left: 76px;
-    top:4%;
+
+.deleteCol {
+    display: none;
+    left: 125px;
+    top:69px;
     position: absolute;
 }
-.btn-rm{
-visibility: hidden;
-    background-color: #7a1404;
+
+.btn-rm {
+    visibility: visible;
+    background-color: #b20000;
     color: #ffffff;
     border: none;
 }
 
-.btn{
-
-    font-size: 50px;
-    width:72px;
-    height: 72px;
+.btn {
+    font-size: 25px;
+    width: 52px;
+    height: 52px;
 }
-.btn-add{
+
+.btn-add {
     top: auto;
-    background-color: #ffcc33;
+    background-color: #f3a500;
     border: none;
     color: #ffffff;
 }
-.btn:hover{
-    opacity: 85%;
+
+.btn:hover {
+    transition: opacity 0.5s;
+    opacity: 65%;
 }
 
 button:focus {
     outline: none;
 }
-
-
