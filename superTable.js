@@ -1,4 +1,3 @@
-
 const Square = new SuperTable("#rect-block", "4", "4");
 Square.drawTable();
 
@@ -14,6 +13,6 @@ btnRow.addEventListener("click", () => Square.btnAddRow());
 rmRow.addEventListener("click", () => Square.deleteRow());
 rmCol.addEventListener("click", () => Square.deleteCol());
 block.addEventListener("mousemove", e => Square.removeCol(e, rmCol));
-block.addEventListener("mousemove", e => Square.removeRow(e, rmRow));
+block.addEventListener("mousemove", e => Square.removeRow(e));
 square.addEventListener("mouseover", e => Square.colCount(e, rmCol, rmRow));
 square.addEventListener("mouseout", e => Square.rowCount(e, rmCol, rmRow));
