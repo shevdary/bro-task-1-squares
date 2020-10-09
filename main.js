@@ -26,16 +26,20 @@ class SuperTable {
 
   btnAddCol = () => {
     const addCol = document.querySelectorAll("tr");
+    let index = Number(addCol[0].lastElementChild.getAttribute("id"));
     for (const item of addCol) {
-      this.createElements("td", item, "col");
+      this.createElements("td", item, "col", index + 1);
     }
   };
   btnAddRow = () => {
+    document.querySelector(".deleteRow").style.visibility === "hidden"
+      ? (document.querySelector(".deleteRow").style.visibility = "visible")
+      : "";
     const tbody = document.querySelectorAll("tbody");
     const tbodyChildren = tbody[0].children;
     const childrenLen = tbodyChildren[0].children.length;
-    let index = tbodyChildren.length;
-    this.createElements("tr", this.$el, "row", index);
+    let index = Number(tbody[0].lastElementChild.getAttribute("id"));
+    this.createElements("tr", this.$el, "row", index + 1);
     for (let q = 0; q < childrenLen; q++) {
       let bodyRow = tbody[0].lastElementChild;
       this.createElements("td", bodyRow, "col", q);
@@ -43,16 +47,18 @@ class SuperTable {
   };
   deleteRow = () => {
     const getBody = document.querySelectorAll("tbody")[0].children;
+    const row = document.querySelector(".deleteRow");
     let childBody = getBody[this.positionRow];
-    childBody == undefined
-      ? getBody.remove(childBody)
-      : childBody.parentNode.removeChild(childBody);
+    getBody.length <= 2
+      ? (row.style.visibility = "hidden")
+      : (row.style.visibility = "visible");
+    childBody.parentNode.removeChild(childBody);
   };
   deleteCol = () => {
     const getBody = document.querySelectorAll("tbody")[0].children;
     for (let a of getBody) {
-      let childRow = a.children[this.positionCol];
-      childRow.parentNode.removeChild(childRow);
+      let childCol = a.children[this.positionCol];
+      childCol.parentNode.removeChild(childCol);
     }
   };
   removeCol = (event, rmCol) => {
@@ -83,7 +89,7 @@ class SuperTable {
   rowCount = event => {
     let row = document.querySelector(".deleteRow");
     let col = document.querySelector(".deleteCol");
-    col.style.display = "inline-block";
-    row.style.display = "inline-block";
+    col.style.display = "none";
+    row.style.display = "none";
   };
 }
