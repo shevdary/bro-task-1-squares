@@ -27,18 +27,17 @@ class SuperTable {
   btnAddCol = () => {
     const addCol = document.querySelectorAll("tr");
     let index = Number(addCol[0].lastElementChild.getAttribute("id"));
+    this.visibleBtn(".deleteCol");
     for (const item of addCol) {
       this.createElements("td", item, "col", index + 1);
     }
   };
   btnAddRow = () => {
-    document.querySelector(".deleteRow").style.visibility === "hidden"
-      ? (document.querySelector(".deleteRow").style.visibility = "visible")
-      : "";
     const tbody = document.querySelectorAll("tbody");
     const tbodyChildren = tbody[0].children;
     const childrenLen = tbodyChildren[0].children.length;
     let index = Number(tbody[0].lastElementChild.getAttribute("id"));
+    this.visibleBtn(".deleteRow");
     this.createElements("tr", this.$el, "row", index + 1);
     for (let q = 0; q < childrenLen; q++) {
       let bodyRow = tbody[0].lastElementChild;
@@ -49,13 +48,12 @@ class SuperTable {
     const getBody = document.querySelectorAll("tbody")[0].children;
     const row = document.querySelector(".deleteRow");
     let childBody = getBody[this.positionRow];
-    getBody.length <= 2
-      ? (row.style.visibility = "hidden")
-      : (row.style.visibility = "visible");
+    this.hiddenBtn(getBody, ".deleteRow");
     childBody.parentNode.removeChild(childBody);
   };
   deleteCol = () => {
     const getBody = document.querySelectorAll("tbody")[0].children;
+    this.hiddenBtn(getBody, ".deleteCol");
     for (let a of getBody) {
       let childCol = a.children[this.positionCol];
       childCol.parentNode.removeChild(childCol);
@@ -91,5 +89,21 @@ class SuperTable {
     let col = document.querySelector(".deleteCol");
     col.style.display = "none";
     row.style.display = "none";
+  };
+  visibleBtn = className => {
+    document.querySelector(className).style.visibility === "hidden"
+      ? (document.querySelector(className).style.visibility = "visible")
+      : "";
+  };
+  hiddenBtn = (parentElement, className) => {
+    if (className === ".deleteRow") {
+      parentElement.length <= 2
+        ? (document.querySelector(className).style.visibility = "hidden")
+        : (document.querySelector(className).style.visibility = "visible");
+    } else if (className === ".deleteCol") {
+      parentElement[0].children.length <= 2
+        ? (document.querySelector(className).style.visibility = "hidden")
+        : (document.querySelector(className).style.visibility = "visible");
+    }
   };
 }
