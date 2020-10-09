@@ -50,7 +50,7 @@ table {
 .deleteCol {
     display: none;
     left: 125px;
-    top:69px;
+    top: 69px;
     position: absolute;
 }
 
@@ -65,6 +65,7 @@ table {
     font-size: 25px;
     width: 52px;
     height: 52px;
+    transition: 0.2s;
 }
 
 .btn-add {
