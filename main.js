@@ -46,18 +46,17 @@ class SuperTable {
   };
   deleteRow = () => {
     const getBody = document.querySelectorAll("tbody")[0].children;
-    const row = document.querySelector(".deleteRow");
     let childBody = getBody[this.positionRow];
     this.hiddenBtn(getBody, ".deleteRow");
     childBody.parentNode.removeChild(childBody);
   };
   deleteCol = () => {
-    const getBody = document.querySelectorAll("tbody")[0].children;
+    const getBody = document.querySelectorAll("tr");
     this.hiddenBtn(getBody, ".deleteCol");
-    for (let a of getBody) {
-      let childCol = a.children[this.positionCol];
-      childCol.parentNode.removeChild(childCol);
-    }
+      for (let a of getBody) {
+        let childCol = a.children[Number(this.positionCol)];
+          childCol.remove();
+      }
   };
   removeCol = (event, rmCol) => {
     let e = event;
