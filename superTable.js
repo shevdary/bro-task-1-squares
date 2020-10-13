@@ -12,7 +12,9 @@ btnCol.addEventListener("click", () => Square.btnAddCol());
 btnRow.addEventListener("click", () => Square.btnAddRow());
 rmRow.addEventListener("click", () => Square.deleteRow());
 rmCol.addEventListener("click", () => Square.deleteCol());
-block.addEventListener("mousemove", e => Square.removeCol(e, rmCol));
-block.addEventListener("mousemove", e => Square.removeRow(e));
+block.addEventListener("mousemove", e => Square.moveBtnCol(e, rmCol));
+block.addEventListener("mousemove", e => Square.moveBtnRow(e,rmRow));
 square.addEventListener("mouseover", e => Square.colCount(e, rmCol, rmRow));
 square.addEventListener("mouseout", e => Square.rowCount(e, rmCol, rmRow));
+block.addEventListener("mousemove", e => Square.dragNdrop(e));
+

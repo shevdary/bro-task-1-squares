@@ -132,4 +132,101 @@ class SuperTable {
         : (document.querySelector(className).style.visibility = "visible");
     }
   };
+
+  dragNdrop = () => {
+    const dataChild = document.querySelector("#rect-block"),
+      taskElement = dataChild.querySelectorAll(".row");
+    let selectedNodePos = 0,
+      node = "",
+      selectedNodePosNext = 0;
+    for (const list of taskElement) {
+      list.draggable = true;
+    }
+    let childrenBody = document.querySelectorAll("tbody")[0].children;
+    dataChild.addEventListener("dragstart", e => {
+      const target = e.target;
+      /*target.style.opacity='35%'*/
+      /*target.classList.add("selected");*/
+      setTimeout(() => {
+        /*target.classList.add("hide");*/
+        /*target.style.opacity='35%'*/
+        target.style.opacity='35%'
+        node = target;
+      }, 0);
+      for (let list of taskElement[target.getAttribute("position")].children) {
+       /* list.classList.add("selectedChild");*/
+      }
+    });
+    dataChild.addEventListener("dragover", e => {
+      e.preventDefault();
+      const target = e.target;
+      currentPosition(e.clientY);
+    });
+    const currentPosition = (positionY) => {
+      childrenPosition();
+      let nodeAbove, nodeBelow;
+      for (let i = 0; i < dataChild.children.length; i++) {
+        if (dataChild.children[i].getAttribute("totalPosition") < positionY) {
+          nodeAbove = dataChild.children[i];
+          node.style.background='red'
+          selectedNodePos = i;
+          selectedNodePosNext = i + 1;
+        } else {
+          if (!nodeBelow) {
+            nodeBelow = dataChild.children[i];
+
+          }
+        }
+      }
+      if (typeof nodeAbove ==  "undefined") {
+        selectedNodePos = 0;
+      }
+      if (typeof nodeBelow == "object") {
+        nodeBelow.style.transition = "1.8s";
+      }
+    };
+    const childrenPosition = () => {
+      for (let i = 0; i < dataChild.children.length; i++) {
+        let elements = dataChild.children[i];
+        let bound = elements.getBoundingClientRect();
+        let yTop = bound.top;
+        let yBtm = bound.bottom;
+        dataChild.children[i].setAttribute(
+          "totalPosition",
+          yTop + (yTop - yBtm) / 2
+        );
+      }
+    };
+    dataChild.addEventListener('dragenter',e=>{
+      const target=e.target;
+      for (let list of taskElement[target.parentElement.getAttribute("position")].children) {
+          list.classList.add('red');
+        };
+    })
+    dataChild.addEventListener('dragleave',e=>{
+      const target=e.target;
+      for (let list of taskElement[target.parentElement.getAttribute("position")].children) {
+        list.classList.remove('red');
+      };
+    })
+    dataChild.addEventListener("dragend", e => {
+      const target = e.target;
+
+     /* taskElement[target.getAttribute("position")].classList.remove("hide");*/
+      taskElement[target.getAttribute("position")].style.opacity='100%';
+    });
+    dataChild.addEventListener("drop", e => {
+      e.preventDefault();
+      let target = e.target;
+      for (let list of taskElement[target.getAttribute("position")].children) {
+          setTimeout(() => {
+            list.classList.remove('red')
+            list.style.transition = "2s";
+          }, 10);
+      }
+      dataChild.insertBefore(node, dataChild.children[selectedNodePosNext]);
+    });
+  };
 }
+
+

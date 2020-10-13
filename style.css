@@ -83,3 +83,18 @@ table {
 button:focus {
     outline: none;
 }
+.selectedChild{
+    background-color: darkblue;
+}
+.hide {
+    display: none;
+}
+.top{
+    top:50px
+}
+.top:hover{
+    top:0px
+}
+.red{
+    background-color: #ff7e41;
+}
