@@ -58,12 +58,6 @@ class SuperTable {
             row => row.getAttribute("position") === this.positionRow
           )
         ];
-      /*console.log(children, a.lastElementChild);
-      console.log("----------------------------");
-      console.log(children === a.lastElementChild);
-      children === a.lastElementChild
-        ? styleBtn.classList.add("top")
-        : styleBtn.classList.remove("top");*/
       children.remove();
       this.hiddenBtn(a.children, ".deleteRow");
     }
@@ -93,7 +87,6 @@ class SuperTable {
   moveBtnRow = (event, rmRow) => {
     const e = event;
     const tbodyChildren = this.tbody[0].children;
-    /*rmRow.classList.add('hideLastElement')*/
     for (let index of tbodyChildren) {
       this.maxCountRow = Math.max(Number(index.getAttribute("position")));
     }
@@ -145,40 +138,32 @@ class SuperTable {
     let childrenBody = document.querySelectorAll("tbody")[0].children;
     dataChild.addEventListener("dragstart", e => {
       const target = e.target;
-      /*target.style.opacity='35%'*/
-      /*target.classList.add("selected");*/
       setTimeout(() => {
-        /*target.classList.add("hide");*/
-        /*target.style.opacity='35%'*/
-        target.style.opacity='35%'
+        target.style.opacity = "35%";
         node = target;
       }, 0);
-      for (let list of taskElement[target.getAttribute("position")].children) {
-       /* list.classList.add("selectedChild");*/
-      }
     });
     dataChild.addEventListener("dragover", e => {
       e.preventDefault();
       const target = e.target;
       currentPosition(e.clientY);
     });
-    const currentPosition = (positionY) => {
+    const currentPosition = positionY => {
       childrenPosition();
       let nodeAbove, nodeBelow;
       for (let i = 0; i < dataChild.children.length; i++) {
         if (dataChild.children[i].getAttribute("totalPosition") < positionY) {
           nodeAbove = dataChild.children[i];
-          node.style.background='red'
+          node.style.background = "red";
           selectedNodePos = i;
           selectedNodePosNext = i + 1;
         } else {
           if (!nodeBelow) {
             nodeBelow = dataChild.children[i];
-
           }
         }
       }
-      if (typeof nodeAbove ==  "undefined") {
+      if (typeof nodeAbove == "undefined") {
         selectedNodePos = 0;
       }
       if (typeof nodeBelow == "object") {
@@ -197,32 +182,34 @@ class SuperTable {
         );
       }
     };
-    dataChild.addEventListener('dragenter',e=>{
-      const target=e.target;
-      for (let list of taskElement[target.parentElement.getAttribute("position")].children) {
-          list.classList.add('red');
-        };
-    })
-    dataChild.addEventListener('dragleave',e=>{
-      const target=e.target;
-      for (let list of taskElement[target.parentElement.getAttribute("position")].children) {
-        list.classList.remove('red');
-      };
-    })
+    dataChild.addEventListener("dragenter", e => {
+      const target = e.target;
+      for (let list of taskElement[
+        target.parentElement.getAttribute("position")
+      ].children) {
+        list.classList.add("red");
+      }
+    });
+    dataChild.addEventListener("dragleave", e => {
+      const target = e.target;
+      for (let list of taskElement[
+        target.parentElement.getAttribute("position")
+      ].children) {
+        list.classList.remove("red");
+      }
+    });
     dataChild.addEventListener("dragend", e => {
       const target = e.target;
-
-     /* taskElement[target.getAttribute("position")].classList.remove("hide");*/
-      taskElement[target.getAttribute("position")].style.opacity='100%';
+      taskElement[target.getAttribute("position")].style.opacity = "100%";
     });
     dataChild.addEventListener("drop", e => {
       e.preventDefault();
       let target = e.target;
       for (let list of taskElement[target.getAttribute("position")].children) {
-          setTimeout(() => {
-            list.classList.remove('red')
-            list.style.transition = "2s";
-          }, 10);
+        setTimeout(() => {
+          list.classList.remove("red");
+          list.style.transition = "2s";
+        }, 10);
       }
       dataChild.insertBefore(node, dataChild.children[selectedNodePosNext]);
     });
