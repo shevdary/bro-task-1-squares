@@ -9,7 +9,26 @@ class SuperTable {
     this.positionCol = 0;
     this.maxCountRow = 0;
     this.tbody = document.querySelectorAll("tbody");
+    this.rmCol = document.querySelector(".deleteCol");
+    this.rmRow = document.querySelector(".deleteRow");
+    this.addEvent();
+    this.drawTable();
   }
+  addEvent = () => {
+    const rect = document.querySelector("#rect-block");
+    const addCol = document.querySelector(".addCol");
+    const addRow = document.querySelector(".addRow");
+    const square = document.getElementById("square");
+    rect.addEventListener("mousemove", e => this.dragNdrop(e));
+    rect.addEventListener("mousemove", e => this.moveBtnCol(e));
+    rect.addEventListener("mousemove", e => this.moveBtnRow(e));
+    square.addEventListener("mouseover", e => this.colCount(e));
+    square.addEventListener("mouseout", e => this.rowCount(e));
+    addCol.addEventListener("click", () => this.btnAddCol());
+    this.rmCol.addEventListener("click", () => this.deleteCol());
+    addRow.addEventListener("click", () => this.btnAddRow());
+    this.rmRow.addEventListener("click", () => this.deleteRow());
+  };
   drawTable = () => {
     for (let i = 0; i < this.row; i++) {
       this.createElements("tr", this.$el, "row", i);
@@ -75,8 +94,9 @@ class SuperTable {
       this.hiddenBtn(getBody[0].children, ".deleteCol");
     }
   };
-  moveBtnCol = (event, rmCol) => {
-    let e = event;
+  moveBtnCol = event => {
+    const e = event;
+    const rmCol = document.querySelector(".deleteCol");
     this.positionCol = e.target.getAttribute("position");
     this.mouseX = e.target.offsetLeft;
     const move = () => {
@@ -84,8 +104,9 @@ class SuperTable {
     };
     move();
   };
-  moveBtnRow = (event, rmRow) => {
+  moveBtnRow = event => {
     const e = event;
+    const rmRow = document.querySelector(".deleteRow");
     const tbodyChildren = this.tbody[0].children;
     for (let index of tbodyChildren) {
       this.maxCountRow = Math.max(Number(index.getAttribute("position")));
@@ -215,5 +236,6 @@ class SuperTable {
     });
   };
 }
+
 
 
