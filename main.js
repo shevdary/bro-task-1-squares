@@ -72,6 +72,7 @@ class SuperTable {
       this.positionRow,
       null
     );
+    this.rmRow.style.display = "none";
   };
   deleteCol = () => {
     const getBody = document.querySelectorAll("tr");
@@ -82,21 +83,33 @@ class SuperTable {
       this.positionCol,
       getBody[0].children
     );
-    this.rmCol.style.display='none';
+    this.rmCol.style.display = "none";
   };
   positionBtn = (querySelector, rowORcol, className, position, hideElement) => {
     for (let a of querySelector) {
-      const childCol =
+      const childElem =
         a.children[
           [...a.children].findIndex(
             element => element.getAttribute("position") === position
           )
         ];
-      querySelector[0].lastElementChild.getAttribute("position") ===
-      childCol.getAttribute("position")
-        ? this.clickHideBtn(rowORcol)
-        : null;
-      childCol.remove();
+      if (className === ".deleteRow") {
+        if (childElem) {
+          querySelector[0].lastElementChild.getAttribute("position") ===
+          childElem.getAttribute("position")
+            ? this.clickHideBtn(rowORcol)
+            : null;
+          childElem.remove();
+        } else {
+          querySelector[0].childNodes[this.positionRow].remove();
+        }
+      } else {
+        if (childElem) {
+          childElem.remove();
+        } else {
+          a.children[this.positionCol].remove();
+        }
+      }
       hideElement === null
         ? this.hiddenBtn(a.children, className)
         : this.hiddenBtn(hideElement, className);
@@ -126,16 +139,12 @@ class SuperTable {
     button.style.top = "123px";
   };
   colCount = event => {
-    let row = document.querySelector(".deleteRow");
-    let col = document.querySelector(".deleteCol");
-    col.style.display = "inline-block";
-    row.style.display = "inline-block";
+    this.rmCol.style.display = "inline-block";
+    this.rmRow.style.display = "inline-block";
   };
   rowCount = event => {
-    let row = document.querySelector(".deleteRow");
-    let col = document.querySelector(".deleteCol");
-    col.style.display = "none";
-    row.style.display = "none";
+    this.rmCol.style.display = "none";
+    this.rmRow.style.display = "none";
   };
   visibleBtn = className => {
     document.querySelector(className).style.visibility === "hidden"
@@ -234,7 +243,6 @@ class SuperTable {
       for (let list of target.parentElement.children) {
         list.classList.remove("red");
       }
-      console.log("current node", selectedNodePosNext);
       dataChild.insertBefore(
         currentNode,
         dataChild.children[selectedNodePosNext]
@@ -242,6 +250,3 @@ class SuperTable {
     });
   };
 }
-
-
-
