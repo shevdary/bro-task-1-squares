@@ -30,6 +30,7 @@ class SuperTable {
     this.rmRow.addEventListener("click", () => this.deleteRow());
   };
   drawTable = () => {
+    this.maxCountRow = this.row;
     for (let i = 0; i < this.row; i++) {
       this.createElements("tr", this.$el, "row", i);
       for (let j = 0; j < this.col; j++) {
@@ -69,29 +70,41 @@ class SuperTable {
     this.visibleBtn(".deleteRow");
   };
   deleteRow = () => {
-    const styleBtn = document.querySelector(".deleteRow");
-    for (let a of this.tbody) {
-      const children =
-        a.children[
-          [...a.children].findIndex(
-            row => row.getAttribute("position") === this.positionRow
-          )
-        ];
-      children.remove();
-      this.hiddenBtn(a.children, ".deleteRow");
-    }
+    this.positionBtn(
+      this.tbody,
+      this.rmRow,
+      ".deleteRow",
+      this.positionRow,
+      null
+    );
   };
   deleteCol = () => {
     const getBody = document.querySelectorAll("tr");
-    for (let a of getBody) {
+    this.positionBtn(
+      getBody,
+      this.rmCol,
+      ".deleteCol",
+      this.positionCol,
+      getBody[0].children
+    );
+    this.rmCol.style.display='none';
+  };
+  positionBtn = (querySelector, rowORcol, className, position, hideElement) => {
+    for (let a of querySelector) {
       const childCol =
         a.children[
           [...a.children].findIndex(
-            col => col.getAttribute("position") === this.positionCol
+            element => element.getAttribute("position") === position
           )
         ];
+      querySelector[0].lastElementChild.getAttribute("position") ===
+      childCol.getAttribute("position")
+        ? this.clickHideBtn(rowORcol)
+        : null;
       childCol.remove();
-      this.hiddenBtn(getBody[0].children, ".deleteCol");
+      hideElement === null
+        ? this.hiddenBtn(a.children, className)
+        : this.hiddenBtn(hideElement, className);
     }
   };
   moveBtnCol = event => {
@@ -108,15 +121,14 @@ class SuperTable {
     const e = event;
     const rmRow = document.querySelector(".deleteRow");
     const tbodyChildren = this.tbody[0].children;
-    for (let index of tbodyChildren) {
-      this.maxCountRow = Math.max(Number(index.getAttribute("position")));
-    }
     this.positionRow = e.target.parentElement.getAttribute("position");
     this.mouseY = e.target.offsetTop;
     const move = () => {
       rmRow.style.marginTop = this.mouseY + 2 + "px";
     };
     move();
+    let button = document.querySelector(".deleteRow");
+    button.style.top = "123px";
   };
   colCount = event => {
     let row = document.querySelector(".deleteRow");
@@ -146,7 +158,13 @@ class SuperTable {
         : (document.querySelector(className).style.visibility = "visible");
     }
   };
-
+  clickHideBtn = button => {
+    if (button.classList.contains("deleteRow")) button.style.top = "70px";
+    else if (button.classList.contains("deleteCol")) {
+      let px = parseInt(this.rmCol.style.left) - 54;
+      button.style.left = px + "px";
+    }
+  };
   dragNdrop = () => {
     const dataChild = document.querySelector("#rect-block"),
       taskElement = dataChild.querySelectorAll(".row");

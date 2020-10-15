@@ -96,5 +96,8 @@ button:focus {
     top:0px
 }
 .red{
-    background-color: #ff7e41;
+    background-color: #f3a500;
+}
+.opacityTarget{
+    opacity:35%;
 }
