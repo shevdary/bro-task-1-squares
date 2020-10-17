@@ -6,7 +6,7 @@ class SuperTable {
     this.tbodyData = null;
     this.btnRmRow = null;
     this.btnRmCol = null;
-    this.tableData=null;
+    this.tableData = null;
     this.positionDelete = 0;
     this.targetElement = 0;
     this.drawTable();
@@ -21,8 +21,8 @@ class SuperTable {
     const addCol = document.querySelector(".btn-add-col");
     addRow.addEventListener("click", this.addRow);
     addCol.addEventListener("click", this.addCell);
-    this.btnRmRow.addEventListener("click", () => this.deleteRow());
-    this.btnRmCol.addEventListener("click", () => this.deleteCell());
+    this.btnRmRow.addEventListener("click", e => this.deleteRow(e));
+    this.btnRmCol.addEventListener("click", e => this.deleteCell(e));
     this.$el.addEventListener("mousemove", e => this.showRemoveBtn(e));
     this.$el.addEventListener("mouseout", e => this.hideRemoveBtn(e));
     this.tbodyData.addEventListener("mouseover", e => this.mouseMoveY(e));
@@ -43,7 +43,7 @@ class SuperTable {
     this.drawButton("&minus;", "btn-rm-col", this.$el);
 
     this.$el.appendChild(this.tableData);
-      this.tableData.setAttribute("class", "table");
+    this.tableData.setAttribute("class", "table");
   };
 
   drawButton = (textHTML, classListName, parentDiv) => {
@@ -70,19 +70,27 @@ class SuperTable {
 
   showRemoveBtn = e => {
     const targetTagName = e.target.tagName;
-    if (targetTagName === "TD" || targetTagName === "TABLE" || targetTagName === "BUTTON") {
-     this.btnRmRow.style.display = "block";
-     this.btnRmCol.style.display = "block";
+    if (
+      targetTagName === "TD" ||
+      targetTagName === "TABLE" ||
+      targetTagName === "BUTTON"
+    ) {
+      this.btnRmRow.style.display = "block";
+      this.btnRmCol.style.display = "block";
     }
   };
 
   hideRemoveBtn = e => {
     const targetElement = e.target.tagName;
-    if (targetElement  !== "TD" && targetElement  !== "TABLE" && targetElement  !== "BUTTON") {
+    if (
+      targetElement !== "TD" &&
+      targetElement !== "TABLE" &&
+      targetElement !== "BUTTON"
+    ) {
       document.querySelector(".btn-rm-row").style.display = "none";
       document.querySelector(".btn-rm-col").style.display = "none";
     }
-    if (targetElement  === "TD") {
+    if (targetElement === "TD") {
       const positionTR = e.target.parentNode;
       for (let i = 0; i < this.tbodyData.children.length; i++) {
         if (positionTR === this.tbodyData.children[i]) {
@@ -104,30 +112,39 @@ class SuperTable {
     const mousePositionTop = e.target.offsetTop;
     const mousePositionLeft = e.target.offsetLeft;
     btnRow.style.marginTop = mousePositionTop + 16 + "px";
-    btnCol.style.marginLeft = mousePositionLeft + 16 + "px";
+    btnCol.style.marginLeft = mousePositionLeft + 17 + "px";
     btnCol.style.transition = "0.25s";
     btnRow.style.transition = "0.25s";
     this.visibleBtn();
   };
 
-  deleteRow = () => {
-    let rowCollection = this.tableData.children[0].children;
+  deleteRow = e => {
+    let rowArray = this.tableData.children[0].children;
     for (let i = 0; i < this.tbodyData.children.length; i++) {
-      if (this.positionDelete === rowCollection[i]) {
-        rowCollection[i].parentElement.removeChild(rowCollection[i]);
+      if (this.positionDelete === rowArray[i]) {
+        if (rowArray[i] === rowArray[i].parentNode.lastElementChild) {
+          this.btnRmRow.style.marginTop = e.target.offsetTop - 160 + "px";
+        }
+        rowArray[i].parentElement.removeChild(rowArray[i]);
       }
     }
     this.hiddenBtn();
   };
 
-  deleteCell = () => {
-    let tr = document.querySelectorAll("tr");
-    for (let i = 0; i < tr.length; i++) {
-      const currentChildren = tr[i].children;
+  deleteCell = e => {
+    let trArray = document.querySelectorAll("tr");
+    for (let i = 0; i < trArray.length; i++) {
+      if (
+          trArray[i].lastElementChild === trArray[i].children[this.targetElement]
+      ) {
+        this.btnRmCol.style.marginLeft = e.target.offsetLeft - 162 + "px";
+      }
+      const currentChildren = trArray[i].children;
       currentChildren[this.targetElement].remove();
     }
     this.hiddenBtn();
   };
+
 
   hiddenBtn = () => {
     const childTr = document.querySelectorAll("tr");
