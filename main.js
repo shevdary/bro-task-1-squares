@@ -6,6 +6,7 @@ class SuperTable {
     this.tbodyData = null;
     this.btnRmRow = null;
     this.btnRmCol = null;
+    this.tableData=null;
     this.positionDelete = 0;
     this.targetElement = 0;
     this.drawTable();
@@ -28,21 +29,21 @@ class SuperTable {
   };
 
   drawTable = () => {
-    const table = document.createElement("table");
+    this.tableData = document.createElement("table");
     for (let i = 0; i < this.rowCount; i++) {
-      const row = table.insertRow(i);
+      const row = this.tableData.insertRow(i);
       row.setAttribute("class", "row-data");
       for (let j = 0; j < this.colCount; j++) {
         row.insertCell(j).setAttribute("class", "cell-data");
       }
     }
-    this.drawButton("+", "btn-add-row", table);
-    this.drawButton("+", "btn-add-col", table);
+    this.drawButton("+", "btn-add-row", this.tableData);
+    this.drawButton("+", "btn-add-col", this.tableData);
     this.drawButton("&minus;", "btn-rm-row", this.$el);
     this.drawButton("&minus;", "btn-rm-col", this.$el);
 
-    this.$el.appendChild(table);
-    table.setAttribute("class", "table");
+    this.$el.appendChild(this.tableData);
+      this.tableData.setAttribute("class", "table");
   };
 
   drawButton = (textHTML, classListName, parentDiv) => {
@@ -53,8 +54,7 @@ class SuperTable {
   };
 
   addRow = () => {
-    const table = document.querySelector("table").children[0];
-    const newRow = table.insertRow();
+    const newRow = this.tableData.children[0].insertRow();
     const cellCount = document.querySelector("tr").children.length;
     for (let i = 0; i < cellCount; i++) {
       newRow.insertCell(i).setAttribute("class", "row-data");
@@ -62,28 +62,27 @@ class SuperTable {
   };
 
   addCell = () => {
-    const table = document.querySelector("table").children[0];
-    const addCellElement = table.children;
-    for (let i = 0; i < addCellElement.length; i++) {
-      addCellElement[i].insertCell().setAttribute("class", "cell-data");
+    const newCellElement = this.tableData.children[0].children;
+    for (let i = 0; i < newCellElement.length; i++) {
+      newCellElement[i].insertCell().setAttribute("class", "cell-data");
     }
   };
 
   showRemoveBtn = e => {
-    const target = e.target.tagName;
-    if (target === "TD" || target === "TABLE" || target === "BUTTON") {
-      document.querySelector(".btn-rm-row").style.display = "block";
-      document.querySelector(".btn-rm-col").style.display = "block";
+    const targetTagName = e.target.tagName;
+    if (targetTagName === "TD" || targetTagName === "TABLE" || targetTagName === "BUTTON") {
+     this.btnRmRow.style.display = "block";
+     this.btnRmCol.style.display = "block";
     }
   };
 
   hideRemoveBtn = e => {
-    const target = e.target.tagName;
-    if (target !== "TD" && target !== "TABLE" && target !== "BUTTON") {
+    const targetElement = e.target.tagName;
+    if (targetElement  !== "TD" && targetElement  !== "TABLE" && targetElement  !== "BUTTON") {
       document.querySelector(".btn-rm-row").style.display = "none";
       document.querySelector(".btn-rm-col").style.display = "none";
     }
-    if (target === "TD") {
+    if (targetElement  === "TD") {
       const positionTR = e.target.parentNode;
       for (let i = 0; i < this.tbodyData.children.length; i++) {
         if (positionTR === this.tbodyData.children[i]) {
@@ -112,8 +111,7 @@ class SuperTable {
   };
 
   deleteRow = () => {
-    const table = document.querySelector("table").children[0];
-    let rowCollection = table.children;
+    let rowCollection = this.tableData.children[0].children;
     for (let i = 0; i < this.tbodyData.children.length; i++) {
       if (this.positionDelete === rowCollection[i]) {
         rowCollection[i].parentElement.removeChild(rowCollection[i]);
