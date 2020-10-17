@@ -1,4 +1,5 @@
 
+
 body {
     padding-top: 100px;
     padding-left: 100px;
@@ -7,97 +8,61 @@ body {
 
 .main-square {
     display: flex;
-    padding: 15px;
-}
-
-.parent-table {
-    display: table;
 }
 
 table {
+    margin: 15px;
     position: relative;
     display: inline-block;
     border: 1px solid #48aae6;
-
 }
 
-.col, .row {
-    height: 50px;
-    width: 50px;
+td, tr {
     background-color: #48aae6;;
 }
-
-.addCol {
-    margin-top: 3px;
-    margin-left: 2px;
-    position: absolute;
+ tr, td {
+    height: 50px;
+    width: 50px;
 }
-
-.addRow {
-    margin-top: -2px;
-    left: 126px;
-    display: block;
-    position: absolute;
-}
-
-.deleteRow {
-    margin-top: 3px;
-    display: none;
-    left: 69px;
-    position: absolute;
-}
-
-.deleteCol {
-    display: none;
-    left: 125px;
-    top: 69px;
-    position: absolute;
-}
-
-.btn-rm {
-    visibility: visible;
-    background-color: #b20000;
+button{
+    outline: none;
     color: #ffffff;
-    border: none;
-}
-
-.btn {
+    width: 51px;
+    height: 51px;
     font-size: 25px;
-    width: 52px;
-    height: 52px;
-    transition: 0.2s;
-}
-
-.btn-add {
-    top: auto;
-    background-color: #f3a500;
+    position: absolute;
     border: none;
-    color: #ffffff;
+    background-position: 20px 24px, 24px 20px;
+    background-repeat: no-repeat;
 }
-
-.btn:hover {
+button:hover {
     transition: opacity 0.5s;
     opacity: 65%;
 }
 
-button:focus {
-    outline: none;
-}
-.selectedChild{
-    background-color: darkblue;
-}
-.hide {
+.btn-rm-row {
+    left: 70px;
+    margin: 18px 2px 0px 0px;
     display: none;
+    background-color: #b20000;
 }
-.top{
-    top:50px
+
+.btn-rm-col {
+    top: 68px;
+    margin: 2px 0px 5px 18px;
+    display: none;
+    background-color: #b20000;
 }
-.top:hover{
-    top:0px
-}
-.red{
+
+.btn-add-col {
+    display: block;
+    top:2px;
+    right: -54px;
     background-color: #f3a500;
 }
-.opacityTarget{
-    opacity:35%;
+.btn-add-row {
+    display: block;
+    margin: 3px 2px 0px;
+    background-color: #f3a500;
 }
+

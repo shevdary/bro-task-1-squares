@@ -1,252 +1,163 @@
 class SuperTable {
   constructor(selector, rowCount, colCount) {
-    this.$el = document.querySelector(selector);
-    this.col = colCount;
-    this.row = rowCount;
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.positionRow = 0;
-    this.positionCol = 0;
-    this.maxCountRow = 0;
-    this.tbody = document.querySelectorAll("tbody");
-    this.rmCol = document.querySelector(".deleteCol");
-    this.rmRow = document.querySelector(".deleteRow");
-    this.addEvent();
+    this.$el = document.getElementById("square");
+    this.colCount = colCount;
+    this.rowCount = rowCount;
+    this.tbodyData = null;
+    this.btnRmRow = null;
+    this.btnRmCol = null;
+    this.positionDelete = 0;
+    this.targetElement = 0;
     this.drawTable();
+    this.eventAction();
   }
-  addEvent = () => {
-    const rect = document.querySelector("#rect-block");
-    const addCol = document.querySelector(".addCol");
-    const addRow = document.querySelector(".addRow");
-    const square = document.getElementById("square");
-    rect.addEventListener("mousemove", e => this.dragNdrop(e));
-    rect.addEventListener("mousemove", e => this.moveBtnCol(e));
-    rect.addEventListener("mousemove", e => this.moveBtnRow(e));
-    square.addEventListener("mouseover", e => this.colCount(e));
-    square.addEventListener("mouseout", e => this.rowCount(e));
-    addCol.addEventListener("click", () => this.btnAddCol());
-    this.rmCol.addEventListener("click", () => this.deleteCol());
-    addRow.addEventListener("click", () => this.btnAddRow());
-    this.rmRow.addEventListener("click", () => this.deleteRow());
+
+  eventAction = () => {
+    this.tbodyData = document.querySelector("tbody");
+    this.btnRmRow = document.querySelector(".btn-rm-row");
+    this.btnRmCol = document.querySelector(".btn-rm-col");
+    const addRow = document.querySelector(".btn-add-row");
+    const addCol = document.querySelector(".btn-add-col");
+    addRow.addEventListener("click", this.addRow);
+    addCol.addEventListener("click", this.addCell);
+    this.btnRmRow.addEventListener("click", () => this.deleteRow());
+    this.btnRmCol.addEventListener("click", () => this.deleteCell());
+    this.$el.addEventListener("mousemove", e => this.showRemoveBtn(e));
+    this.$el.addEventListener("mouseout", e => this.hideRemoveBtn(e));
+    this.tbodyData.addEventListener("mouseover", e => this.mouseMoveY(e));
   };
+
   drawTable = () => {
-    this.maxCountRow = this.row;
-    for (let i = 0; i < this.row; i++) {
-      this.createElements("tr", this.$el, "row", i);
-      for (let j = 0; j < this.col; j++) {
-        let child = this.$el.lastElementChild;
-        this.createElements("td", child, "col", j);
+    const table = document.createElement("table");
+    for (let i = 0; i < this.rowCount; i++) {
+      const row = table.insertRow(i);
+      row.setAttribute("class", "row-data");
+      for (let j = 0; j < this.colCount; j++) {
+        row.insertCell(j).setAttribute("class", "cell-data");
       }
     }
+    this.drawButton("+", "btn-add-row", table);
+    this.drawButton("+", "btn-add-col", table);
+    this.drawButton("&minus;", "btn-rm-row", this.$el);
+    this.drawButton("&minus;", "btn-rm-col", this.$el);
+
+    this.$el.appendChild(table);
+    table.setAttribute("class", "table");
   };
-  createElements = (tag, tagParent, className, index) => {
-    const tr = document.createElement(tag);
-    tr.setAttribute("class", className);
-    tr.setAttribute("position", index);
-    tagParent.appendChild(tr);
+
+  drawButton = (textHTML, classListName, parentDiv) => {
+    const btn = document.createElement("button");
+    btn.innerHTML = textHTML;
+    btn.classList.add(classListName);
+    parentDiv.appendChild(btn);
   };
-  btnAddCol = () => {
-    const addCol = document.querySelectorAll("tr");
-    let index = Number(addCol[0].lastElementChild.getAttribute("position"));
-    this.visibleBtn(".deleteCol");
-    for (const item of addCol) {
-      this.createElements("td", item, "col", index + 1);
+
+  addRow = () => {
+    const table = document.querySelector("table").children[0];
+    const newRow = table.insertRow();
+    const cellCount = document.querySelector("tr").children.length;
+    for (let i = 0; i < cellCount; i++) {
+      newRow.insertCell(i).setAttribute("class", "row-data");
     }
   };
-  btnAddRow = () => {
-    const tbodyChildren = this.tbody[0].children;
-    const childrenLen = tbodyChildren[0].children.length;
-    this.createElements("tr", this.$el, "row", Number(this.maxCountRow));
-    for (let q = 0; q < childrenLen; q++) {
-      let bodyRow = this.tbody[0].lastElementChild;
-      this.createElements("td", bodyRow, "col", q);
+
+  addCell = () => {
+    const table = document.querySelector("table").children[0];
+    const addCellElement = table.children;
+    for (let i = 0; i < addCellElement.length; i++) {
+      addCellElement[i].insertCell().setAttribute("class", "cell-data");
     }
-    this.visibleBtn(".deleteRow");
-    this.maxCountRow = Number(this.maxCountRow) + 1;
   };
-  deleteRow = () => {
-    this.positionBtn(
-      this.tbody,
-      this.rmRow,
-      ".deleteRow",
-      this.positionRow,
-      null
-    );
-    this.rmRow.style.display = "none";
+
+  showRemoveBtn = e => {
+    const target = e.target.tagName;
+    if (target === "TD" || target === "TABLE" || target === "BUTTON") {
+      document.querySelector(".btn-rm-row").style.display = "block";
+      document.querySelector(".btn-rm-col").style.display = "block";
+    }
   };
-  deleteCol = () => {
-    const getBody = document.querySelectorAll("tr");
-    this.positionBtn(
-      getBody,
-      this.rmCol,
-      ".deleteCol",
-      this.positionCol,
-      getBody[0].children
-    );
-    this.rmCol.style.display = "none";
-  };
-  positionBtn = (querySelector, rowORcol, className, position, hideElement) => {
-    for (let a of querySelector) {
-      const childElem =
-        a.children[
-          [...a.children].findIndex(
-            element => element.getAttribute("position") === position
-          )
-        ];
-      if (className === ".deleteRow") {
-        if (childElem) {
-          querySelector[0].lastElementChild.getAttribute("position") ===
-          childElem.getAttribute("position")
-            ? this.clickHideBtn(rowORcol)
-            : null;
-          childElem.remove();
-        } else {
-          querySelector[0].childNodes[this.positionRow].remove();
+
+  hideRemoveBtn = e => {
+    const target = e.target.tagName;
+    if (target !== "TD" && target !== "TABLE" && target !== "BUTTON") {
+      document.querySelector(".btn-rm-row").style.display = "none";
+      document.querySelector(".btn-rm-col").style.display = "none";
+    }
+    if (target === "TD") {
+      const positionTR = e.target.parentNode;
+      for (let i = 0; i < this.tbodyData.children.length; i++) {
+        if (positionTR === this.tbodyData.children[i]) {
+          this.positionDelete = positionTR;
         }
-      } else {
-        if (childElem) {
-          childElem.remove();
-        } else {
-          a.children[this.positionCol].remove();
-        }
-      }
-      hideElement === null
-        ? this.hiddenBtn(a.children, className)
-        : this.hiddenBtn(hideElement, className);
-    }
-  };
-  moveBtnCol = event => {
-    const e = event;
-    const rmCol = document.querySelector(".deleteCol");
-    this.positionCol = e.target.getAttribute("position");
-    this.mouseX = e.target.offsetLeft;
-    const move = () => {
-      rmCol.style.left = this.mouseX + 124 + "px";
-    };
-    move();
-  };
-  moveBtnRow = event => {
-    const e = event;
-    const rmRow = document.querySelector(".deleteRow");
-    const tbodyChildren = this.tbody[0].children;
-    this.positionRow = e.target.parentElement.getAttribute("position");
-    this.mouseY = e.target.offsetTop;
-    const move = () => {
-      rmRow.style.marginTop = this.mouseY + 2 + "px";
-    };
-    move();
-    let button = document.querySelector(".deleteRow");
-    button.style.top = "123px";
-  };
-  colCount = event => {
-    this.rmCol.style.display = "inline-block";
-    this.rmRow.style.display = "inline-block";
-  };
-  rowCount = event => {
-    this.rmCol.style.display = "none";
-    this.rmRow.style.display = "none";
-  };
-  visibleBtn = className => {
-    document.querySelector(className).style.visibility === "hidden"
-      ? (document.querySelector(className).style.visibility = "visible")
-      : "";
-  };
-  hiddenBtn = (parentElement, className) => {
-    if (className === ".deleteRow") {
-      parentElement.length < 2
-        ? (document.querySelector(className).style.visibility = "hidden")
-        : (document.querySelector(className).style.visibility = "visible");
-    } else if (className === ".deleteCol") {
-      parentElement.length < 2
-        ? (document.querySelector(className).style.visibility = "hidden")
-        : (document.querySelector(className).style.visibility = "visible");
-    }
-  };
-  clickHideBtn = button => {
-    if (button.classList.contains("deleteRow")) button.style.top = "70px";
-    else if (button.classList.contains("deleteCol")) {
-      let px = parseInt(this.rmCol.style.left) - 54;
-      button.style.left = px + "px";
-    }
-  };
-  dragNdrop = () => {
-    const dataChild = document.querySelector("#rect-block"),
-      taskElement = dataChild.querySelectorAll(".row");
-    let selectedNodePos = 0,
-      currentNode = "",
-      selectedNodePosNext = 0;
-    for (const list of taskElement) {
-      list.draggable = true;
-    }
-    let childrenBody = document.querySelectorAll("tbody")[0].children;
-    dataChild.addEventListener("dragstart", e => {
-      const target = e.target;
-      setTimeout(() => {
-        target.style.opacity = "35%";
-        currentNode = target;
-      }, 0);
-    });
-    dataChild.addEventListener("dragover", e => {
-      e.preventDefault();
-      const target = e.target;
-      childrenPosition();
-      let nodeAbove, nodeBelow;
-      for (let i = 0; i < dataChild.children.length; i++) {
-        if (dataChild.children[i].getAttribute("totalPosition") < e.clientY) {
-          nodeAbove = dataChild.children[i];
-          selectedNodePosNext = i + 1;
-        } else {
-          if (!nodeBelow && i !== 0) {
-            nodeBelow = dataChild.children[i];
-            selectedNodePosNext = i - 1;
+        for (let j = 0; j < this.tbodyData.children[i].children.length; j++) {
+          const positionTD = this.tbodyData.children[i].children;
+          if (positionTD[j] === e.target) {
+            this.targetElement = j;
           }
         }
       }
-      if (typeof nodeAbove == "undefined") {
-        selectedNodePosNext = 0;
+    }
+  };
+
+  mouseMoveY = e => {
+    const btnRow = document.querySelector(".btn-rm-row");
+    const btnCol = document.querySelector(".btn-rm-col");
+    const mousePositionTop = e.target.offsetTop;
+    const mousePositionLeft = e.target.offsetLeft;
+    btnRow.style.marginTop = mousePositionTop + 16 + "px";
+    btnCol.style.marginLeft = mousePositionLeft + 16 + "px";
+    btnCol.style.transition = "0.25s";
+    btnRow.style.transition = "0.25s";
+    this.visibleBtn();
+  };
+
+  deleteRow = () => {
+    const table = document.querySelector("table").children[0];
+    let rowCollection = table.children;
+    for (let i = 0; i < this.tbodyData.children.length; i++) {
+      if (this.positionDelete === rowCollection[i]) {
+        rowCollection[i].parentElement.removeChild(rowCollection[i]);
+      }
+    }
+    this.hiddenBtn();
+  };
+
+  deleteCell = () => {
+    let tr = document.querySelectorAll("tr");
+    for (let i = 0; i < tr.length; i++) {
+      const currentChildren = tr[i].children;
+      currentChildren[this.targetElement].remove();
+    }
+    this.hiddenBtn();
+  };
+
+  hiddenBtn = () => {
+    const childTr = document.querySelectorAll("tr");
+    this.btnRmRow.style.display = "none";
+    this.btnRmCol.style.display = "none";
+    childTr.forEach(tdChild => {
+      if (tdChild.children.length < 2) {
+        this.btnRmCol.style.visibility = "hidden";
+      } else if (tdChild.children.length > 1) {
+        this.btnRmCol.style.visibility = "visible";
       }
     });
-    const childrenPosition = () => {
-      for (let i = 0; i < dataChild.children.length; i++) {
-        let elements = dataChild.children[i];
-        let bound = elements.getBoundingClientRect();
-        let yTop = bound.top;
-        let yBtm = bound.bottom;
-        dataChild.children[i].setAttribute(
-          "totalPosition",
-          yTop + (yTop - yBtm) / 2
-        );
-      }
-    };
-    dataChild.addEventListener("dragenter", e => {
-      const target = e.target;
-      for (let list of target.parentElement.children) {
-        list.classList.add("red");
+    if (this.tbodyData.children.length < 2) {
+      this.btnRmRow.style.visibility = "hidden";
+    } else if (this.tbodyData.children.length > 1) {
+      this.btnRmRow.style.visibility = "visible";
+    }
+  };
+
+  visibleBtn = () => {
+    const childTr = document.querySelectorAll("tr");
+    childTr.forEach(tdChild => {
+      if (tdChild.children.length > 1) {
+        this.btnRmCol.style.visibility = "visible";
       }
     });
-    dataChild.addEventListener("dragleave", e => {
-      const target = e.target;
-      for (let list of target.parentElement.children) {
-        list.classList.remove("red");
-      }
-    });
-    dataChild.addEventListener("dragend", e => {
-      const target = e.target;
-      for (let list of target.parentElement.children) {
-        list.style.opacity = "100%";
-        list.classList.remove("red");
-      }
-    });
-    dataChild.addEventListener("drop", e => {
-      e.preventDefault();
-      let target = e.target;
-      for (let list of target.parentElement.children) {
-        list.classList.remove("red");
-      }
-      dataChild.insertBefore(
-        currentNode,
-        dataChild.children[selectedNodePosNext]
-      );
-    });
+    if (this.tbodyData.children.length > 1) {
+      this.btnRmRow.style.visibility = "visible";
+    }
   };
 }
